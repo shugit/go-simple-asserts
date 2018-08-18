@@ -19,5 +19,13 @@ func Test_Int(t *testing.T) {
 	asserts.AssertGreaterThan(2, 3, t)
 	asserts.AssertNull(2, t)
 	asserts.AssertNotNull(nil, t)
+}
 
+func Test_Bytes(t *testing.T) {
+	var abc = []byte("abc")
+	var bcd = []byte("bcd")
+	asserts.AssertEqual(abc, []byte("abc"), t)
+	asserts.AssertEqual(bcd, []byte("bbb"), t)
+	asserts.AssertLengthEqual(bcd, 7, t)
+	asserts.AssertLengthGreaterThan(bcd, 7, t)
 }

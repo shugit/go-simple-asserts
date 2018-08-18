@@ -59,7 +59,7 @@ func AssertEqual(actual, expected interface{}, t *testing.T) {
 	case []byte:
 		actualBytes := actual.([]byte)
 		if bytes.Compare(exp, actualBytes) != 0 {
-			printFail(t, loc, actual, comparison, exp)
+			printFail(t, loc, string(actualBytes), comparison, string(exp))
 		}
 	default:
 		fmt.Printf("%v:[FAIL]:Not Supported type comparison expected\n", loc)
@@ -98,7 +98,7 @@ func AssertNotEqual(actual, expected interface{}, t *testing.T, str string) {
 	case []byte:
 		actualBytes := actual.([]byte)
 		if bytes.Compare(exp, actualBytes) == 0 {
-			printFail(t, loc, actual, comparison, exp)
+			printFail(t, loc, string(actualBytes), comparison, string(exp))
 		}
 	default:
 		fmt.Printf("%v:[FAIL]:Not Supported type comparison expected\n", loc)
@@ -174,5 +174,43 @@ func AssertFalse(actual bool, t *testing.T) {
 	loc := getLocation()
 	if actual != false {
 		printFail(t, loc, actual, "be", false)
+	}
+}
+
+func AssertLengthEqual(actual interface{}, expLen int, t *testing.T) {
+	loc := getLocation()
+	comparison := "equal to length"
+	switch act := actual.(type) {
+	case string:
+		if len(act) != expLen {
+			printFail(t, loc, actual, comparison, expLen)
+		}
+	case []byte:
+		actualBytes := actual.([]byte)
+		if len(act) != expLen {
+			printFail(t, loc, string(actualBytes), comparison, expLen)
+		}
+	default:
+		fmt.Printf("%v:[FAIL]:Not Supported type comparison expected\n", loc)
+		t.Fail()
+	}
+}
+
+func AssertLengthGreaterThan(actual interface{}, expLen int, t *testing.T) {
+	loc := getLocation()
+	comparison := "greater or equal to length"
+	switch act := actual.(type) {
+	case string:
+		if len(act) < expLen {
+			printFail(t, loc, actual, comparison, expLen)
+		}
+	case []byte:
+		actualBytes := actual.([]byte)
+		if len(act) < expLen {
+			printFail(t, loc, string(actualBytes), comparison, expLen)
+		}
+	default:
+		fmt.Printf("%v:[FAIL]:Not Supported type comparison expected\n", loc)
+		t.Fail()
 	}
 }
